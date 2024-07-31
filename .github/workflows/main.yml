@@ -4,11 +4,9 @@ on:
   push:
   pull_request:
 
-env:
-  RADIO_TOOL_VERSION: 0.2.2
-
 jobs:
   build-linux:
+    name: build linux binaries
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -37,6 +35,7 @@ jobs:
 
 
   build-arm:
+    name: build arm binaries
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -70,6 +69,7 @@ jobs:
 
 
   unit-test:
+    name: build and run unit-tests
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -86,8 +86,8 @@ jobs:
         run: meson test -C build
 
 
-  formatting-check:
-    name: Formatting Check
+  clang-format:
+    name: run clang format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
