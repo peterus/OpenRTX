@@ -20,8 +20,7 @@ jobs:
           sudo apt update
           sudo apt install -y git pkg-config build-essential meson libsdl2-dev libreadline-dev dfu-util cmake libusb-1.0-0 libusb-1.0-0-dev libcodec2-dev codec2
       - name: setup meson
-        run: |
-          meson setup build_linux
+        run: meson setup build_linux
       - name: Compile linux
         run: |
           meson compile -C build_linux openrtx_linux
@@ -29,7 +28,7 @@ jobs:
           meson compile -C build_linux openrtx_linux_mod17
       - uses: actions/upload-artifact@v4
         with:
-          name: release-bins
+          name: linux_build
           path: |
             build_linux/openrtx_linux
             build_linux/openrtx_linux_smallscreen
@@ -52,8 +51,7 @@ jobs:
           chmod +x MiosixToolchainInstaller.run
           sudo sh MiosixToolchainInstaller.run
       - name: setup meson
-        run: |
-          meson setup --cross-file cross_arm.txt build_arm
+        run: meson setup --cross-file cross_arm.txt build_arm
       - name: Compile arm targets
         run: |
           meson compile -C build_arm openrtx_md3x0_wrap
@@ -64,9 +62,8 @@ jobs:
           meson compile -C build_arm openrtx_mod17_wrap
       - uses: actions/upload-artifact@v4
         with:
-          name: release-bins
-          path: |
-            ${{github.workspace}}/build_arm/openrtx_*_wrap
+          name: arm_build
+          path: build_arm/openrtx_*_wrap
 
 
   unit-test:
@@ -81,7 +78,6 @@ jobs:
           sudo apt update
           sudo apt install -y git pkg-config build-essential meson libsdl2-dev libreadline-dev dfu-util cmake libusb-1.0-0 libusb-1.0-0-dev libcodec2-dev codec2
       - name: setup meson
-        run: |
-          meson setup build
+        run: meson setup build
       - name: run unit test
         run: meson test -C build
