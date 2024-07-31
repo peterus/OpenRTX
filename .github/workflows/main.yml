@@ -26,13 +26,15 @@ jobs:
           meson compile -C build_linux openrtx_linux
           meson compile -C build_linux openrtx_linux_smallscreen
           meson compile -C build_linux openrtx_linux_mod17
-      - uses: actions/upload-artifact@v4
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
         with:
           name: linux_build
           path: |
             build_linux/openrtx_linux
             build_linux/openrtx_linux_smallscreen
             build_linux/openrtx_linux_mod17
+
 
   build-arm:
     runs-on: ubuntu-22.04
@@ -60,7 +62,8 @@ jobs:
           meson compile -C build_arm openrtx_gd77_wrap
           meson compile -C build_arm openrtx_dm1801_wrap
           meson compile -C build_arm openrtx_mod17_wrap
-      - uses: actions/upload-artifact@v4
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
         with:
           name: arm_build
           path: build_arm/openrtx_*_wrap
@@ -81,3 +84,16 @@ jobs:
         run: meson setup build
       - name: run unit test
         run: meson test -C build
+
+
+  formatting-check:
+    name: Formatting Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Run clang-format style check for C/C++ programs.
+        uses: jidicula/clang-format-action@v4.13.0
+        with:
+          clang-format-version: '14'
+          check-path: openrtx
